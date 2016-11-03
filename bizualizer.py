@@ -285,4 +285,4 @@ def unregister():
     del bpy.types.Scene.bz_amplitude
     del bpy.types.Scene.bz_spacing
     del bpy.types.Scene.bz_use_radial
-del bpy.types.Scene.bz_radius
+    del bpy.types.Scene.bz_radius
