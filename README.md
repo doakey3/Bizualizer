@@ -6,7 +6,7 @@ A visualizer addon for blender
 
 ![Linear](http://i.imgur.com/duCaEyY.gif)
 
-![Radial](http://i.imgur.com/dZDSfZx.gif)
+![Radial](http://i.imgur.com/r20zvgY.gif)
 
 ##User Interface
 
