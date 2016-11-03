@@ -2,7 +2,7 @@ bl_info = {
     "name": "Bizualizer",
     "description": "Create a simple vizualizer for audio",
     "author": "doakey3",
-    "version": (1, 0, 2),
+    "version": (1, 0, 3),
     "blender": (2, 7, 8),
     "wiki_url": "https://github.com/doakey3/Bizualizer",
     "tracker_url": "https://github.com/doakey3/Bizualizer/issues",
@@ -150,6 +150,7 @@ class GenerateVizualizer(bpy.types.Operator):
         wm = context.window_manager
         wm.progress_begin(0, 100.0)
         
+        context.area.type = 'GRAPH_EDITOR'
         for i in range(0, bar_count):
             #Add a plane with it's origin = center
             name = 'bz_bar' + (("%0" + digits + "d") % i)
@@ -203,11 +204,12 @@ class GenerateVizualizer(bpy.types.Operator):
         
         wm.progress_end()
         update_progress("Generating Vizualizer", 1)
+        context.area.type = 'PROPERTIES'
         scene.objects.active = None
         return {'FINISHED'}
         
 def update_progress(job_title, progress):
-    length = 20
+    length = 20 # modify this to change the length
     block = int(round(length*progress))
     msg = "\r{0}: [{1}] {2}%".format(job_title,
         "#"*block + "-"*(length-block), round(progress*100, 2))
@@ -283,4 +285,4 @@ def unregister():
     del bpy.types.Scene.bz_amplitude
     del bpy.types.Scene.bz_spacing
     del bpy.types.Scene.bz_use_radial
-    del bpy.types.Scene.bz_radius
+del bpy.types.Scene.bz_radius
