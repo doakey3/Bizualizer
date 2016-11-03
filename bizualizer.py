@@ -2,7 +2,7 @@ bl_info = {
     "name": "Bizualizer",
     "description": "Create a simple vizualizer for audio",
     "author": "doakey3",
-    "version": (1, 0, 0),
+    "version": (1, 0, 1),
     "blender": (2, 7, 8),
     "wiki_url": "https://github.com/doakey3/Bizualizer",
     "tracker_url": "https://github.com/doakey3/Bizualizer/issues",
@@ -66,7 +66,7 @@ class AudioToVSE(bpy.types.Operator):
             
     def execute(self, context):
         scene = context.scene
-        audiofile = scene.bz_audiofile
+        audiofile = bpy.path.abspath(scene.bz_audiofile)
         name = ntpath.basename(audiofile)
         chan = scene.bz_audio_channel
         start = 1
@@ -92,7 +92,7 @@ class RemoveBZAudio(bpy.types.Operator):
     
     def execute(self, context):
         scene = context.scene
-        audiofile = scene.bz_audiofile
+        audiofile = bpy.path.abspath(scene.bz_audiofile)
         name = ntpath.basename(audiofile)
         all_strips = list(sorted(
             bpy.context.scene.sequence_editor.sequences_all,
@@ -128,7 +128,7 @@ class GenerateVizualizer(bpy.types.Operator):
         amplitude = scene.bz_amplitude
         spacing = scene.bz_spacing
         radius = scene.bz_radius
-        audiofile = scene.bz_audiofile
+        audiofile = bpy.path.abspath(scene.bz_audiofile)
         digits = str(len(str(bar_count)))
         
         noteStep = 120.0/bar_count
