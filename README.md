@@ -4,13 +4,13 @@ A visualizer addon for blender
 
 ## Examples
 
-(!Linear)[http://i.imgur.com/duCaEyY.gif]
+[!Linear](http://i.imgur.com/duCaEyY.gif)
 
-(!Radial)[http://i.imgur.com/dZDSfZx.gif]
+[!Radial](http://i.imgur.com/dZDSfZx.gif)
 
 ##User Interface
 
-(!UI)[http://i.imgur.com/bL9sj58.png]
+[!UI](http://i.imgur.com/bL9sj58.png)
 
 The User Interface is located in the panel Properties > Scene
 
