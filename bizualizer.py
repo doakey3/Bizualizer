@@ -2,7 +2,7 @@ bl_info = {
     "name": "Bizualizer",
     "description": "Create a simple vizualizer for audio",
     "author": "doakey3",
-    "version": (1, 0, 3),
+    "version": (1, 0, 4),
     "blender": (2, 7, 8),
     "wiki_url": "https://github.com/doakey3/Bizualizer",
     "tracker_url": "https://github.com/doakey3/Bizualizer/issues",
