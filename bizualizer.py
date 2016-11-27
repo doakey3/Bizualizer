@@ -18,6 +18,9 @@ class AudioToVSE(bpy.types.Operator):
             return True
 
     def execute(self, context):
+
+        bpy.ops.sequencerextra.bz_audio_remove()
+        
         scene = context.scene
         audiofile = bpy.path.abspath(scene.bz_audiofile)
         name = ntpath.basename(audiofile)
@@ -64,7 +67,12 @@ class RemoveBZAudio(bpy.types.Operator):
             return True
 
     def execute(self, context):
+
         scene = context.scene
+        
+        if not scene.sequence_editor:
+            return {"FINISHED"}
+        
         audiofile = bpy.path.abspath(scene.bz_audiofile)
         name = ntpath.basename(audiofile)
         all_strips = list(sorted(
