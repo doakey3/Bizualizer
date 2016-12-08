@@ -3,7 +3,7 @@
 Tutorial Video
 ==============
 
-.. image:: http://i.imgur.com/WFNCAWA.png
+.. image:: http://i.imgur.com/v1rGCHn.png
   :target: https://www.youtube.com/watch?v=8mskAiSiEjk&feature=youtu.be
 
 Installation
