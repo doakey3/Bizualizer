@@ -1,16 +1,16 @@
+import bpy
+from .bizualizer import AudioToVSE, RemoveBZAudio, GenerateVizualizer
+
 bl_info = {
     "name": "Bizualizer",
     "description": "Create a simple vizualizer for audio",
     "author": "doakey3",
-    "version": (1, 1, 0),
+    "version": (1, 1, 1),
     "blender": (2, 7, 8),
     "wiki_url": "https://github.com/doakey3/Bizualizer",
     "tracker_url": "https://github.com/doakey3/Bizualizer/issues",
     "category": "Animation",
     "location": "Properties > Scene"}
-
-import bpy
-from .bizualizer import AudioToVSE, RemoveBZAudio, GenerateVizualizer
 
 
 class BizualizerUI(bpy.types.Panel):
@@ -48,6 +48,8 @@ class BizualizerUI(bpy.types.Panel):
             col_b.enabled = False
         row = layout.row()
         row.operator("object.bz_generate", icon="RADIO")
+        row = layout.row()
+        row.operator("object.bz_align_camera", icon="CAMERA_DATA")
 
 
 def initprop():
