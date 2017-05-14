@@ -225,7 +225,7 @@ class AlignCamera(bpy.types.Operator):
         camera.rotation_euler = [0.0, 0.0, 0.0]
         return {"FINISHED"}
     
-
+    
 def update_progress(job_title, progress):
     length = 20
     block = int(round(length*progress))
