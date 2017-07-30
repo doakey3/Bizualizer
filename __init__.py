@@ -1,11 +1,15 @@
 import bpy
-from .bizualizer import AudioToVSE, RemoveBZAudio, GenerateVizualizer
+
+from .operators.align_camera import AlignCamera
+from .operators.audio_to_vse import AudioToVSE
+from .operators.generate_visualizer import GenerateVisualizer
+from .operators.remove_bz_audio import RemoveBZAudio
 
 bl_info = {
     "name": "Bizualizer",
-    "description": "Create a simple vizualizer for audio",
+    "description": "Create a simple visualizer for audio",
     "author": "doakey3",
-    "version": (1, 1, 1),
+    "version": (1, 2, 0),
     "blender": (2, 7, 8),
     "wiki_url": "https://github.com/doakey3/Bizualizer",
     "tracker_url": "https://github.com/doakey3/Bizualizer/issues",
@@ -54,7 +58,6 @@ class BizualizerUI(bpy.types.Panel):
 
 def initprop():
     bpy.types.Scene.bz_audiofile = bpy.props.StringProperty(
-        name="Audio File",
         description="Define path of the audio file",
         subtype="FILE_PATH",
         )
@@ -89,13 +92,13 @@ def initprop():
 
     bpy.types.Scene.bz_use_radial = bpy.props.BoolProperty(
         name="Use Radial",
-        description="Use a circular vizualizer",
+        description="Use a circular visualizer",
         default=False
         )
 
     bpy.types.Scene.bz_radius = bpy.props.FloatProperty(
         name="Radius",
-        description="Radius of the radial vizualizer",
+        description="Radius of the radial visualizer",
         default=20,
         min=0
         )
