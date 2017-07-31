@@ -33,20 +33,44 @@ bottom. Add a song by clicking the button with a folder icon. You can
 adjust the settings and generate the visualizer. Some examples are shown
 below.
 
+Examples
+========
+
+.. image:: http://i.imgur.com/duCaEyY.gif
+
+.. image:: http://i.imgur.com/r20zvgY.gif
+
 Batch Bizualizer
 ================
-Setup Bizualizer instructions in a .csv file and convert all in one go.
+This part of the addon will allow you to use a .csv file with 
+visualizer settings for several songs to create the visualizer for 
+the entire batch. Unfortunately, this part of the addon requires you
+to install some extras...
 
-Currently seems to only be working in linux. Needs more testing for Windows users.
+Installation (Windows)
+----------------------
+Install `ffmpeg`_ by downloading the executable, then add the path to
+that executable to your system variable Path. If done correctly, you
+should be able to enter ``ffmpeg`` into your command prompt without
+getting an error.
 
-Installation
-------------
+Install pip.exe into your Blender python folder by downloading 
+`get-pip.py`_ and running it with the python.exe located in your Blender 
+installation folder. You'll need to use a command prompt with admin
+priveledges.
+
+Use pip.exe in the Scripts folder to install mutagen and pillow.
+Do ``path/to/pip.exe install mutagen pillow``. Again, you'll need
+to use an admin level command prompt to do this.
+
+Installation (Linux)
+--------------------
 Install `ffmpeg`_ with ``sudo apt-get install ffmpeg``
 
 .. _ffmpeg: https://www.ffmpeg.org/
 
-Install `pillow`_ and `mutagen`_ The 
-easiest way may be to run `get-pip.py`_ like this: ``sudo python get-pip.py``
+Install `pillow`_ and `mutagen`_ using pip. To get pip download 
+`get-pip.py`_ and run it with: ``sudo python get-pip.py``
 Then install the two packages like this:
 
 ``sudo pip install pillow mutagen``
@@ -62,11 +86,17 @@ Usage
 * Create a .csv file like the one included in this package.
 * Place all mp3 files and png files into the same folder where the .csv file is located
 * Open blender and use the 'Config File' browse button to navigate to the .csv file
+* Open the Blender Terminal so you can see the Addon Working
+
+  - (Windows) Window -> Toggle System Console
+  - (Linux) Start Blender with the terminal
+  
+* Run Batch Bizualize
 
 CSV Options
 -----------
-:Song: The name of the song, for example: We Belong.mp3
-:Background: The name of the background image, for example: birds.png
+:Song: (Required) The name of the song, for example: We Belong.mp3
+:Background: (Required) The name of the background image, for example: birds.png
 :Bar Color: (hexcode) The color that will be applied to the visualize bars. 
 :Bar Count: (integer) The number of bars that will be displayed in the visualizer
 :Bar Style: The visualizer style. Options include: bottom, top, top-bottom, left, right, left-right, horizontal-center, vertical-center
@@ -74,10 +104,3 @@ CSV Options
 :Height Fraction: (Float from 0.0 to 1.0) Controls the amplitude of the bars.
 :Fade: (0 or 1) Add Fade in & out to the video
 :Opacity: (Float from 0.0 to 1.0) Controls the opacity of the visualizer bars.
-
-Examples
-========
-
-.. image:: http://i.imgur.com/duCaEyY.gif
-
-.. image:: http://i.imgur.com/r20zvgY.gif
