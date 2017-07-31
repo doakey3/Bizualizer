@@ -92,7 +92,7 @@ def make_mp4(song_path, bg_img_path, bar_color, bar_count, space_fraction,
     command = [
         'ffmpeg', '-r', str(frame_rate), '-i', frames, '-i', mp3,
         '-codec:v', 'libx264', '-codec:a', 'copy',
-        '-pix_fmt', 'yuv420p', '-y']
+        '-pix_fmt', 'yuv420p', '-y', '-v', 'quiet', '-stats']
         
     if fade == True:
         command.append('-vf')
