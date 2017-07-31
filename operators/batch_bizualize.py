@@ -76,7 +76,7 @@ def make_mp4(song_path, bg_img_path, bar_color, bar_count, space_fraction,
         
         progress = 100 * (i / len(bar_heights_list[0]))
         update_progress("Generating Frames", progress/100.0)
-    
+    update_progress("Generating Frames", 100.0/100.0)
     frames = frames_path + "/%09d.png"
     mp3 = song_path
     mp4 = os.path.splitext(mp3)[0] + '.mp4'

@@ -37,25 +37,25 @@ Batch Bizualizer
 ================
 Setup Bizualizer instructions in a .csv file and convert all in one go.
 
+Currently seems to only be working in linux. Needs more testing for Windows users.
+
 Installation
 ------------
-Install `ffmpeg`_ and make it available on your system path (edit your system environment variables if needed)
+Install `ffmpeg`_ with ``sudo apt-get install ffmpeg``
 
 .. _ffmpeg: https://www.ffmpeg.org/
 
-Install `pillow`_ and `mutagen`_ to the blender python library. The 
-easiest way may be to run `get-pip.py`_ with the python.exe file in 
-Blender's program folder. Then use the pip.exe in a terminal like this:
+Install `pillow`_ and `mutagen`_ The 
+easiest way may be to run `get-pip.py`_ like this: ``sudo python get-pip.py``
+Then install the two packages like this:
 
-path/to/blender/pip.exe install pillow mutagen
+``sudo pip install pillow mutagen``
 
 .. _get-pip.py: https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=0ahUKEwjOyLaI4rLVAhWrjlQKHe8VAWMQFggmMAA&url=https%3A%2F%2Fbootstrap.pypa.io%2Fget-pip.py&usg=AFQjCNE8Fo9j_sgo1hBzEoUT39H85hFDrg
 
 .. _pillow: https://python-pillow.org/
 
 .. _mutagen: https://pypi.python.org/pypi/mutagen
-
-Linux users should install mutagen and pillow to their system-wide python.
 
 Usage
 -----
