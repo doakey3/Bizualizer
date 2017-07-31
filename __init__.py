@@ -1,15 +1,18 @@
 import bpy
+import os
+import shutil
 
 from .operators.align_camera import AlignCamera
 from .operators.audio_to_vse import AudioToVSE
 from .operators.generate_visualizer import GenerateVisualizer
 from .operators.remove_bz_audio import RemoveBZAudio
+from .operators.batch_bizualize import BatchBizualize
 
 bl_info = {
     "name": "Bizualizer",
     "description": "Create a simple visualizer for audio",
     "author": "doakey3",
-    "version": (1, 2, 0),
+    "version": (1, 2, 1),
     "blender": (2, 7, 8),
     "wiki_url": "https://github.com/doakey3/Bizualizer",
     "tracker_url": "https://github.com/doakey3/Bizualizer/issues",
@@ -41,6 +44,8 @@ class BizualizerUI(bpy.types.Panel):
         row.prop(scene, "bz_amplitude")
         row.prop(scene, "bz_spacing")
         row = layout.row()
+        row.prop(scene, "bz_color")
+        row = layout.row()
         split = row.split()
         col_a = split.column(align=True)
         col_a.prop(scene, "bz_use_radial")
@@ -54,10 +59,16 @@ class BizualizerUI(bpy.types.Panel):
         row.operator("object.bz_generate", icon="RADIO")
         row = layout.row()
         row.operator("object.bz_align_camera", icon="CAMERA_DATA")
-
+        
+        box = layout.box()
+        row = box.row()
+        row.prop(scene, 'bbz_config')
+        row = box.row()
+        row.operator('object.batch_bizualize', icon="RADIO")
 
 def initprop():
     bpy.types.Scene.bz_audiofile = bpy.props.StringProperty(
+        name="Audio Path", 
         description="Define path of the audio file",
         subtype="FILE_PATH",
         )
@@ -89,6 +100,14 @@ def initprop():
         default=24.0,
         min=0
         )
+    
+    bpy.types.Scene.bz_color = bpy.props.FloatVectorProperty(  
+        name="Bar Color",
+        subtype='COLOR_GAMMA',
+        description="Color applied to bars after visualizer is generated",
+        size=3,
+        default=(1.0, 1.0, 1.0),
+        min=0.0, max=1.0,)
 
     bpy.types.Scene.bz_use_radial = bpy.props.BoolProperty(
         name="Use Radial",
@@ -109,14 +128,18 @@ def initprop():
         default=2.25,
         min=0
         )
-
+        
+    bpy.types.Scene.bbz_config = bpy.props.StringProperty(
+        name="Config File",
+        description="Path to the Config File",
+        subtype="FILE_PATH",
+        )
 
 def register():
     bpy.utils.register_module(__name__)
 
     initprop()
-
-
+        
 def unregister():
     bpy.utils.unregister_module(__name__)
 

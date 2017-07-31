@@ -3,6 +3,18 @@ import math
 
 from .tools.update_progress import update_progress
 
+def make_color(name, rgb):
+    if name in bpy.data.materials:
+        material = bpy.data.materials[name]
+    else:
+        material = bpy.data.materials.new(name=name)
+    
+    material.diffuse_color = rgb
+    material.diffuse_intensity = 1
+    material.use_shadeless = True
+    material.type = 'SURFACE'
+    return material
+
 class GenerateVisualizer(bpy.types.Operator):
     bl_idname = "object.bz_generate"
     bl_label = "(re)Generate Visualizer"
@@ -90,6 +102,14 @@ class GenerateVisualizer(bpy.types.Operator):
                 filepath=audiofile, low=(l), high=(h))
             active = bpy.context.active_object
             active.animation_data.action.fcurves[1].lock = True
+            
+            red = scene.bz_color[0]
+            green = scene.bz_color[1]
+            blue = scene.bz_color[2]
+            material = make_color('bz_color', [red, green, blue])
+            active.active_material = material
+            
+            
             bar.select = False
             progress = 100 * (i/bar_count)
             wm.progress_update(progress)
