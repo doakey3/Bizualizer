@@ -77,9 +77,9 @@ def make_mp4(song_path, bg_img_path, bar_color, bar_count, space_fraction,
         progress = 100 * (i / len(bar_heights_list[0]))
         update_progress("Generating Frames", progress/100.0)
     update_progress("Generating Frames", 100.0/100.0)
-    frames = frames_path + "/%09d.png"
-    mp3 = song_path
-    mp4 = os.path.splitext(mp3)[0] + '.mp4'
+    frames = '"' + os.path.join(frames_path, '%09d.png') + '"'
+    mp3 = '"' + song_path + '"'
+    mp4 = '"' + os.path.splitext(song_path)[0] + '.mp4' + '"'
     
     fadeout_start = int((frame_rate * total_time) - frame_rate)
     
@@ -91,16 +91,17 @@ def make_mp4(song_path, bg_img_path, bar_color, bar_count, space_fraction,
     
     command = [
         'ffmpeg', '-r', str(frame_rate), '-i', frames, '-i', mp3,
-        '-codec:v', 'libx264', '-vtag', 'xvid', '-codec:a', 'copy',
-        '-strict', '-2', '-pix_fmt', 'yuv420p', '-y']
+        '-codec:v', 'libx264', '-codec:a', 'copy',
+        '-pix_fmt', 'yuv420p', '-y']
         
     if fade == True:
         command.append('-vf')
         command.append(filter_line)
     command.append(mp4)
 
-    print('')
-    subprocess.call(command)
+    command = ' '.join(command)
+
+    subprocess.call(command, shell=True)
     
     shutil.rmtree(frames_path)
     
