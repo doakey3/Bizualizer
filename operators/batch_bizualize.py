@@ -74,9 +74,9 @@ def make_mp4(song_path, bg_img_path, bar_color, bar_count, space_fraction,
                 song_path, bg_img_path, bar_color, bar_count, 
                 space_fraction, height_fraction, heights, outfile)
         
-        progress = 100 * (i / len(bar_heights_list[0]))
-        update_progress("Generating Frames", progress/100.0)
-    update_progress("Generating Frames", 100.0/100.0)
+        progress = (i / len(bar_heights_list[0]))
+        update_progress("Generating Frames", progress)
+    update_progress("Generating Frames", 1)
     frames = '"' + os.path.join(frames_path, '%09d.png') + '"'
     mp3 = '"' + song_path + '"'
     mp4 = '"' + os.path.splitext(song_path)[0] + '.mp4' + '"'
@@ -142,32 +142,33 @@ class BatchBizualize(bpy.types.Operator):
         for i in range(len(settings)):
             
             song_path = os.path.join(config_folder, settings[i]['Song'])
-            
-            frame_rate = scene.render.fps / scene.render.fps_base
-            total_time = MP3(song_path).info.length
-            
-            scene.frame_end = int(frame_rate * total_time)
-            
-            print('')
-            print(settings[i]['Song'])
-            print(space_fill(len(settings[i]['Song']), '='))
-            
-            bg_img_path = os.path.join(config_folder, settings[i]['Background'])
-            bar_color = settings[i]['Bar Color']
-            bar_count = settings[i]['Bar Count']
-            space_fraction = settings[i]['Space Fraction']
-            height_fraction = settings[i]['Height Fraction']
-            bar_style = settings[i]['Bar Style']
-            fade = settings[i]['Fade']
-            
-            bar_color = settings[i]['Bar Color']
-            
-            bar_heights_list = collect_bar_heights_list(song_path, bar_count, scene)
-            
-            make_mp4(
-                song_path, bg_img_path, bar_color, bar_count, space_fraction,
-                height_fraction, bar_heights_list, frame_rate, 
-                total_time, bar_style, fade)
-            print('')
+            vid_path = os.path.splitext(song_path)[0] + '.mp4'
+            if not os.path.isfile(vid_path):
+                frame_rate = scene.render.fps / scene.render.fps_base
+                total_time = MP3(song_path).info.length
+                
+                scene.frame_end = int(frame_rate * total_time)
+                
+                print('')
+                print(settings[i]['Song'])
+                print(space_fill(len(settings[i]['Song']), '='))
+                
+                bg_img_path = os.path.join(config_folder, settings[i]['Background'])
+                bar_color = settings[i]['Bar Color']
+                bar_count = settings[i]['Bar Count']
+                space_fraction = settings[i]['Space Fraction']
+                height_fraction = settings[i]['Height Fraction']
+                bar_style = settings[i]['Bar Style']
+                fade = settings[i]['Fade']
+                
+                bar_color = settings[i]['Bar Color']
+                
+                bar_heights_list = collect_bar_heights_list(song_path, bar_count, scene)
+                
+                make_mp4(
+                    song_path, bg_img_path, bar_color, bar_count, space_fraction,
+                    height_fraction, bar_heights_list, frame_rate, 
+                    total_time, bar_style, fade)
+                print('')
             
         return {"FINISHED"}

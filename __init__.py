@@ -7,6 +7,7 @@ from .operators.audio_to_vse import AudioToVSE
 from .operators.generate_visualizer import GenerateVisualizer
 from .operators.remove_bz_audio import RemoveBZAudio
 from .operators.batch_bizualize import BatchBizualize
+from .operators.make_previews import MakePreviews
 
 bl_info = {
     "name": "Bizualizer",
@@ -65,6 +66,7 @@ class BizualizerUI(bpy.types.Panel):
         row.prop(scene, 'bbz_config')
         row = box.row()
         row.operator('object.batch_bizualize', icon="RADIO")
+        row.operator('object.make_bz_previews')
 
 def initprop():
     bpy.types.Scene.bz_audiofile = bpy.props.StringProperty(
