@@ -5,18 +5,18 @@ from PIL import Image
 import os
 
 COLORS = [
-    [0, 0, 255],   #blue
-    [0, 128, 255], #light blue
-    [0, 255, 255], #cyan
-    [0, 255, 128], #pale green
-    [0, 255, 0],   #green
-    [128, 255, 0], #yellow green
-    [255, 255, 0], #yellow
-    [255, 128, 0], #orange
-    [255, 0, 0],   #red
-    [255, 0, 128], #hot pink
-    [255, 0, 255], #light pink
-    [128, 0, 255], #purple
+    [0, 0, 255],   #blue, #0000ff
+    [0, 128, 255], #light blue, #0080ff
+    [0, 255, 255], #cyan, #00ffff
+    [0, 255, 128], #pale green, #00ff80
+    [0, 255, 0],   #green, #00ff00
+    [128, 255, 0], #yellow green, #80ff00
+    [255, 255, 0], #yellow, #ffff00
+    [255, 128, 0], #orange, #ff8000
+    [255, 0, 0],   #red, #ff0000
+    [255, 0, 128], #hot pink, #ff0080
+    [255, 0, 255], #light pink, #ff00ff
+    [128, 0, 255], #purple, #8000ff
     ]
 
 rtoh = lambda rgb: '#%s' % ''.join(('%02x' % p for p in rgb))

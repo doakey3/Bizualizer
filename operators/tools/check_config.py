@@ -1,5 +1,6 @@
 import os
 import csv
+from .webcolors import name_to_hex
 
 def check_config(path):
     """Checks the config file to see if it is valid"""
@@ -34,12 +35,15 @@ def check_config(path):
             return "Config file row " + str(row + 1) + " has invalid background path"
         
         if 'Bar Color' in settings:
-            if not settings['Bar Color'].startswith('#'):
-                return "Config file row " + str(row + 1) + ": Bar Color must be valid hexcode (starts with '#')"
-            if len(settings['Bar Color'][1::]) > 6 or len(settings['Bar Color'][1::]) % 2 != 0:
-                return "Config file row " + str(row + 1) + ": Bar Color must be valid hexcode ('#' + <= to 6 alphanumerics)"
-            if not settings['Bar Color'][1::].isalnum():
-                return "Config file row " + str(row + 1) + ": Bar Color must be valid hexcode (alpha numeric)"
+            try:
+                name_to_hex(settings['Bar Color'])
+            except ValueError:
+                if not settings['Bar Color'].startswith('#'):
+                    return "Config file row " + str(row + 1) + ": Bar Color must be valid hexcode (starts with '#')"
+                if len(settings['Bar Color'][1::]) > 6 or len(settings['Bar Color'][1::]) % 2 != 0:
+                    return "Config file row " + str(row + 1) + ": Bar Color must be valid hexcode ('#' + <= to 6 alphanumerics)"
+                if not settings['Bar Color'][1::].isalnum():
+                    return "Config file row " + str(row + 1) + ": Bar Color must be valid hexcode (alpha numeric)"
         
         if 'Bar Count' in settings:
             try:

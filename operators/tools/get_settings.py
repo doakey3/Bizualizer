@@ -1,4 +1,5 @@
 import csv
+from .webcolors import name_to_hex
 from .hexcode_to_color import hexcode_to_color
 
 def get_settings(csv_filepath):
@@ -26,6 +27,8 @@ def get_settings(csv_filepath):
         
         if not 'Bar Color' in row_settings:
             row_settings['Bar Color'] = '#FFFFFF'
+        if not row_settings['Bar Color'].startswith('#'):
+            row_settings['Bar Color'] = name_to_hex(row_settings['Bar Color'])
         row_settings['Bar Color'] = hexcode_to_color(row_settings['Bar Color'])
         row_settings['Bar Color'].append(int(row_settings['Opacity'] * 255))
         row_settings['Bar Color'] = tuple(row_settings['Bar Color'])
