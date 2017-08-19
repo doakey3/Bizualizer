@@ -26,8 +26,17 @@ def make_bar_heights_list(bar_count):
 class MakePreviews(bpy.types.Operator):
     bl_label = 'Make Previews'
     bl_idname = 'object.make_bz_previews'
-    bl_description = 'Make Preview Images'
+    bl_description = 'Make Preview Images\nSee Github page for how to enable this'
     
+    @classmethod
+    def poll(self, context):
+        scene = context.scene
+        try:
+            from PIL import Image
+            from mutagen.mp4 import MP4, MP4Cover
+            from mutagen.mp3 import MP3
+        except ImportError:
+            return False
     
     def execute(self, context):
         scene = context.scene

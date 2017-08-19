@@ -2,8 +2,6 @@ import bpy
 import os
 import ntpath
 import csv
-from PIL import Image
-from mutagen.mp4 import MP4, MP4Cover
 
 import shutil
 import sys
@@ -153,17 +151,25 @@ def space_fill(count, symbol):
 class BatchBizualize(bpy.types.Operator):
     bl_label = 'Batch Bizualize'
     bl_idname = 'object.batch_bizualize'
-    bl_description = 'Generate MP4 Files with Bizualizers based on the config file'
+    bl_description = 'Generate MP4 Files with Bizualizers based on the config file.\nSee Github page for how to enable this'
     
     @classmethod
     def poll(self, context):
         scene = context.scene
+        try:
+            from PIL import Image
+            from mutagen.mp4 import MP4, MP4Cover
+            from mutagen.mp3 import MP3
+        except ImportError:
+            return False
         if os.path.isfile(scene.bbz_config) and scene.bbz_config.endswith('.csv'):
             return True
         else:
             return False
     
     def execute(self, context):
+        from PIL import Image
+        from mutagen.mp4 import MP4, MP4Cover
         from mutagen.mp3 import MP3
         
         scene = context.scene
