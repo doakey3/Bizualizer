@@ -17,6 +17,9 @@ from .frame_makers.make_left_right_frame import make_left_right_frame
 from .frame_makers.make_horizontal_center_frame import make_horizontal_center_frame
 from .frame_makers.make_vertical_center_frame import make_vertical_center_frame
 
+import sys
+sys.path.append(os.path.dirname(__file__))
+
 def make_bar_heights_list(bar_count):
     bar_heights_list = []
     for i in range(bar_count):
@@ -35,6 +38,7 @@ class MakePreviews(bpy.types.Operator):
             from PIL import Image
             from mutagen.mp4 import MP4, MP4Cover
             from mutagen.mp3 import MP3
+            return True
         except ImportError:
             return False
     
