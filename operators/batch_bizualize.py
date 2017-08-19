@@ -34,6 +34,7 @@ def make_heights_list(bar_heights, index):
     return heights
     
 def insert_jpg_name(image_path):
+    from PIL import Image
     exif_dict = piexif.load(image_path)
     exif_dict["0th"][269] = ntpath.basename(image_path)
     exif_bytes = piexif.dump(exif_dict)
@@ -42,6 +43,7 @@ def insert_jpg_name(image_path):
     img.save(image_path, exif=exif_bytes)
 
 def insert_mp4_artwork(mp4_path, artwork_path):
+    from mutagen.mp4 import MP4, MP4Cover
     mp4 = MP4(mp4_path)
     
     f = open(artwork_path, 'rb')
@@ -56,11 +58,20 @@ def make_mp4(song_path, bg_img_path, bar_color, bar_count, space_fraction,
              height_fraction, bar_heights_list, frame_rate, 
              total_time, bar_style, fade):
     """Create frames, then make an MP4"""
-    
+    from PIL import Image
     frames_path = os.path.splitext(song_path)[0] + '_frames'
     if os.path.isdir(frames_path):
         shutil.rmtree(frames_path)
     os.mkdir(frames_path)
+    
+    # BG img must be divisible by 2
+    img = Image.open(bg_img_path)
+    if not img.size[0] / 2 == int(img.size[0] / 2):
+        img = img.resize([img.size[0] + 1, img.size[1]])
+        img.save(bg_img_path)
+    if not img.size[1] / 2 == int(img.size[1] /2):
+        img = img.resize([img.size[0], img.size[1] + 1])
+        img.save(bg_img_path)
     
     for i in range(len(bar_heights_list[0])):
         heights = make_heights_list(bar_heights_list, i)
@@ -116,11 +127,12 @@ def make_mp4(song_path, bg_img_path, bar_color, bar_count, space_fraction,
     command = [
         'ffmpeg', '-r', str(frame_rate), '-i', frames, '-i', mp3,
         '-codec:v', 'libx264', '-codec:a', 'copy',
-        '-pix_fmt', 'yuv420p', '-y', '-v', 'quiet', '-stats']
+        '-pix_fmt', 'yuv420p', '-y']
         
     if fade == True:
         command.append('-vf')
         command.append(filter_line)
+    
     command.append(mp4)
 
     command = ' '.join(command)
@@ -138,7 +150,8 @@ def make_mp4(song_path, bg_img_path, bar_color, bar_count, space_fraction,
     insert_jpg_name(jpg_path)
     
     mp4 = os.path.splitext(song_path)[0] + '.mp4'
-    insert_mp4_artwork(mp4, jpg_path)
+    
+    insert_mp4_artwork(os.path.splitext(song_path)[0] + '.mp4', jpg_path)
     
 def space_fill(count, symbol):
     """makes a string that is count long of symbol"""
@@ -168,10 +181,7 @@ class BatchBizualize(bpy.types.Operator):
             return False
     
     def execute(self, context):
-        from PIL import Image
-        from mutagen.mp4 import MP4, MP4Cover
         from mutagen.mp3 import MP3
-        
         scene = context.scene
         message = check_config(scene.bbz_config)
         
