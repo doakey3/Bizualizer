@@ -3,17 +3,46 @@ import math
 
 from .tools.update_progress import update_progress
 
+
 def make_color(name, rgb):
     if name in bpy.data.materials:
         material = bpy.data.materials[name]
     else:
         material = bpy.data.materials.new(name=name)
-    
+
     material.diffuse_color = rgb
     material.diffuse_intensity = 1
     material.use_shadeless = True
     material.type = 'SURFACE'
     return material
+
+
+def get_context_area(context, context_dict, area_type='GRAPH_EDITOR',
+                     context_screen=False):
+    '''
+    context : the current context
+    context_dict : a context dictionary. Will update area, screen, scene,
+                   area, region
+    area_type: the type of area to search for
+    context_screen: Boolean. If true only search in the context screen.
+    '''
+    if not context_screen:  # default
+        screens = bpy.data.screens
+    else:
+        screens = [context.screen]
+    for screen in screens:
+        for area_index, area in screen.areas.items():
+            if area.type == area_type:
+                for region in area.regions:
+                    if region.type == 'WINDOW':
+                        context_dict["area"] = area
+                        context_dict["screen"] = screen
+                        context_dict["scene"] = context.scene
+                        context_dict["window"] = context.window
+                        context_dict["region"] = region
+                        return area
+    return None
+
 
 class GenerateVisualizer(bpy.types.Operator):
     bl_idname = "object.bz_generate"
@@ -57,7 +86,6 @@ class GenerateVisualizer(bpy.types.Operator):
         wm = context.window_manager
         wm.progress_begin(0, 100.0)
 
-        context.area.type = "GRAPH_EDITOR"
         for i in range(0, bar_count):
             name = "bz_bar" + (("%0" + digits + "d") % i)
             mesh = bpy.data.meshes.new(name)
@@ -88,28 +116,31 @@ class GenerateVisualizer(bpy.types.Operator):
 
             bar.scale.x = bar_width
             bar.scale.y = amplitude
+
+            c = bpy.context.copy()
+            get_context_area(bpy.context, c)
+
             bpy.ops.object.transform_apply(
                 location=False, rotation=False, scale=True)
 
-            bpy.ops.anim.keyframe_insert_menu(type="Scaling")
+            bpy.ops.anim.keyframe_insert_menu(c, type="Scaling")
             bar.animation_data.action.fcurves[0].lock = True
             bar.animation_data.action.fcurves[2].lock = True
 
             l = h
             h = l*(a**noteStep)
 
-            bpy.ops.graph.sound_bake(
-                filepath=audiofile, low=(l), high=(h))
+            bpy.ops.graph.sound_bake(c, filepath=audiofile, low=(l), high=(h))
             active = bpy.context.active_object
             active.animation_data.action.fcurves[1].lock = True
-            
+
             red = scene.bz_color[0]
             green = scene.bz_color[1]
             blue = scene.bz_color[2]
             material = make_color('bz_color', [red, green, blue])
             active.active_material = material
-            
-            
+
+
             bar.select = False
             progress = 100 * (i/bar_count)
             wm.progress_update(progress)
@@ -117,7 +148,6 @@ class GenerateVisualizer(bpy.types.Operator):
 
         wm.progress_end()
         update_progress("Generating Visualizer", 1)
-        context.area.type = "PROPERTIES"
         scene.objects.active = None
         scene.use_audio_sync = True
         return {"FINISHED"}

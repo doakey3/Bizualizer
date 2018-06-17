@@ -17,7 +17,7 @@ class AudioToVSE(bpy.types.Operator):
     def execute(self, context):
 
         bpy.ops.sequencerextra.bz_audio_remove()
-        
+
         scene = context.scene
         audiofile = bpy.path.abspath(scene.bz_audiofile)
         name = ntpath.basename(audiofile)
@@ -29,7 +29,7 @@ class AudioToVSE(bpy.types.Operator):
         sound_strip = scene.sequence_editor.sequences.new_sound(
             "bz_" + name, audiofile, chan, start)
 
-        
+
 
         frame_start = 300000
         frame_end = -300000

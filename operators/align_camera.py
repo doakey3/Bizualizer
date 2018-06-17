@@ -17,11 +17,11 @@ class AlignCamera(bpy.types.Operator):
 
         camera = scene.camera
         bpy.data.cameras[camera.data.name].type = 'ORTHO'
-        
+
         bar_count = scene.bz_bar_count
         spacing = scene.bz_spacing
         bar_width = scene.bz_bar_width
-        
+
         res_x = scene.render.resolution_x
         res_y = scene.render.resolution_y
 

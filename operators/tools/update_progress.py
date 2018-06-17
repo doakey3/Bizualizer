@@ -1,5 +1,5 @@
 import sys
-    
+
 def update_progress(job_title, progress):
     length = 20
     block = int(round(length*progress))

@@ -17,10 +17,10 @@ class RemoveBZAudio(bpy.types.Operator):
     def execute(self, context):
 
         scene = context.scene
-        
+
         if not scene.sequence_editor:
             return {"FINISHED"}
-        
+
         audiofile = bpy.path.abspath(scene.bz_audiofile)
         name = ntpath.basename(audiofile)
         all_strips = list(sorted(
