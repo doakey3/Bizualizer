@@ -116,7 +116,7 @@ def make_mp4(song_path, bg_img_path, bar_color, bar_count, space_fraction,
     mp3 = '"' + song_path + '"'
     mp4 = '"' + os.path.splitext(song_path)[0] + '.mp4' + '"'
 
-    fadeout_start = int((frame_rate * total_time) - frame_rate)
+    fadeout_start = int((frame_rate * total_time) - int(frame_rate * 1.25))
 
 
     filter_line = ''.join([
