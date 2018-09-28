@@ -1,8 +1,10 @@
-from PIL import Image, ImageDraw
+
 
 def make_bottom_frame(
     song_path, bg_img_path, bar_color, bar_count, space_fraction, height_fraction,
     bar_heights, outpath):
+
+    from PIL import Image, ImageDraw
 
     bg_img = Image.open(bg_img_path)
     bg_img.convert("RGB")
