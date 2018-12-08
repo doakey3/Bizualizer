@@ -26,7 +26,7 @@ def make_bar_heights_list(bar_count):
         bar_heights_list.append(i / (bar_count - 1))
     return bar_heights_list
 
-class MakePreviews(bpy.types.Operator):
+class RENDER_OT_make_previews(bpy.types.Operator):
     bl_label = 'Make Previews'
     bl_idname = 'object.make_bz_previews'
     bl_description = 'Make Preview Images\nSee Github page for how to enable this'

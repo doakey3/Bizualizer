@@ -2,26 +2,21 @@ import bpy
 import os
 import shutil
 
-from .operators.align_camera import AlignCamera
-from .operators.audio_to_vse import AudioToVSE
-from .operators.generate_visualizer import GenerateVisualizer
-from .operators.remove_bz_audio import RemoveBZAudio
-from .operators.batch_bizualize import BatchBizualize
-from .operators.make_previews import MakePreviews
+from .operators import *
 
 bl_info = {
     "name": "Bizualizer",
     "description": "Create a simple visualizer for audio",
     "author": "doakey3",
-    "version": (1, 2, 3),
-    "blender": (2, 7, 8),
+    "version": (1, 2, 4),
+    "blender": (2, 80, 0),
     "wiki_url": "https://github.com/doakey3/Bizualizer",
     "tracker_url": "https://github.com/doakey3/Bizualizer/issues",
     "category": "Animation",
     "location": "Properties > Scene"}
 
 
-class BizualizerUI(bpy.types.Panel):
+class RENDER_PT_ui(bpy.types.Panel):
     bl_space_type = "PROPERTIES"
     bl_region_type = "WINDOW"
     bl_label = "Bizualizer"
@@ -57,7 +52,7 @@ class BizualizerUI(bpy.types.Panel):
         else:
             col_b.enabled = False
         row = layout.row()
-        row.operator("object.bz_generate", icon="RADIO")
+        row.operator("object.bz_generate", icon="FILE_REFRESH")
         row = layout.row()
         row.operator("object.bz_align_camera", icon="CAMERA_DATA")
         
@@ -65,7 +60,7 @@ class BizualizerUI(bpy.types.Panel):
         row = box.row()
         row.prop(scene, 'bbz_config')
         row = box.row()
-        row.operator('object.batch_bizualize', icon="RADIO")
+        row.operator('object.batch_bizualize', icon="ALIGN_LEFT")
         row.operator('object.make_bz_previews')
 
 def initprop():
@@ -137,18 +132,24 @@ def initprop():
         subtype="FILE_PATH",
         )
 
-def register():
-    bpy.utils.register_module(__name__)
+classes = [
+    RENDER_PT_ui,
+    RENDER_OT_align_camera,
+    RENDER_OT_audio_to_vse,
+    RENDER_OT_batch_bizualize,
+    RENDER_OT_generate_visualizer,
+    RENDER_OT_make_previews,
+    RENDER_OT_remove_bz_audio
+]
 
+def register():
     initprop()
+    
+    from bpy.utils import register_class
+    for cls in classes:
+        register_class(cls)
         
 def unregister():
-    bpy.utils.unregister_module(__name__)
-
-    del bpy.types.Scene.bz_audiofile
-    del bpy.types.Scene.bz_bar_count
-    del bpy.types.Scene.bz_bar_width
-    del bpy.types.Scene.bz_amplitude
-    del bpy.types.Scene.bz_spacing
-    del bpy.types.Scene.bz_use_radial
-    del bpy.types.Scene.bz_radius
+    from bpy.utils import unregister_class
+    for cls in reversed(classes):
+        unregister_class(cls)

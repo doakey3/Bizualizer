@@ -1,6 +1,6 @@
 import bpy
 
-class AlignCamera(bpy.types.Operator):
+class RENDER_OT_align_camera(bpy.types.Operator):
     bl_idname = "object.bz_align_camera"
     bl_label = "Align Camera"
     bl_description = "Aligns camera to bizualizer bars"

@@ -161,7 +161,7 @@ def space_fill(count, symbol):
     return x
 
 
-class BatchBizualize(bpy.types.Operator):
+class RENDER_OT_batch_bizualize(bpy.types.Operator):
     bl_label = 'Batch Bizualize'
     bl_idname = 'object.batch_bizualize'
     bl_description = 'Generate MP4 Files with Bizualizers based on the config file.\nSee Github page for how to enable this'

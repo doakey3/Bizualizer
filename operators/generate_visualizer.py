@@ -9,11 +9,30 @@ def make_color(name, rgb):
         material = bpy.data.materials[name]
     else:
         material = bpy.data.materials.new(name=name)
+    material.use_nodes = True
 
-    material.diffuse_color = rgb
-    material.diffuse_intensity = 1
-    material.use_shadeless = True
-    material.type = 'SURFACE'
+    nodes = material.node_tree.nodes
+    for node in nodes:
+        nodes.remove(node)
+        
+    node_lightpath = nodes.new(type='ShaderNodeLightPath')
+    node_lightpath.location = [-200, 100]
+        
+    node_emission = nodes.new(type='ShaderNodeEmission')
+    node_emission.inputs[0].default_value = (rgb[0], rgb[1], rgb[2], 1)
+    node_emission.location = [0, -50]
+    
+    node_mix = nodes.new(type='ShaderNodeMixShader')
+    node_mix.location = [200, 0]
+    
+    node_output = nodes.new(type='ShaderNodeOutputMaterial')
+    node_output.location = [400,0]
+    
+    links = material.node_tree.links
+    links.new(node_lightpath.outputs[0], node_mix.inputs[0])
+    links.new(node_emission.outputs[0], node_mix.inputs[2])
+    links.new(node_mix.outputs[0], node_output.inputs[0])
+    
     return material
 
 
@@ -44,7 +63,7 @@ def get_context_area(context, context_dict, area_type='GRAPH_EDITOR',
     return None
 
 
-class GenerateVisualizer(bpy.types.Operator):
+class RENDER_OT_generate_visualizer(bpy.types.Operator):
     bl_idname = "object.bz_generate"
     bl_label = "(re)Generate Visualizer"
     bl_description = "Generates visualizer bars and animation"
@@ -78,7 +97,7 @@ class GenerateVisualizer(bpy.types.Operator):
         count = 0
         while count < len(scene.objects):
             if scene.objects[count].name.startswith("bz_bar"):
-                scene.objects[count].select = True
+                scene.objects[count].select_set(True)
                 bpy.ops.object.delete()
             else:
                 count += 1
@@ -90,9 +109,9 @@ class GenerateVisualizer(bpy.types.Operator):
             name = "bz_bar" + (("%0" + digits + "d") % i)
             mesh = bpy.data.meshes.new(name)
             bar = bpy.data.objects.new(name, mesh)
-            scene.objects.link(bar)
-            bar.select = True
-            scene.objects.active = bar
+            scene.collection.objects.link(bar)
+            bar.select_set(True)
+            bpy.context.view_layer.objects.active = bar
             verts = [(-1, 2, 0), (1, 2, 0), (1, 0, 0), (-1, 0, 0)]
             faces = [(3, 2, 1, 0)]
             mesh.from_pydata(verts, [], faces)
@@ -129,8 +148,14 @@ class GenerateVisualizer(bpy.types.Operator):
 
             l = h
             h = l*(a**noteStep)
+            
+            area = bpy.context.area.type
+            bpy.context.area.type = 'GRAPH_EDITOR'
 
-            bpy.ops.graph.sound_bake(c, filepath=audiofile, low=(l), high=(h))
+            bpy.ops.graph.sound_bake(filepath=audiofile, low=(l), high=(h))
+            
+            bpy.context.area.type = area
+            
             active = bpy.context.active_object
             active.animation_data.action.fcurves[1].lock = True
 
@@ -140,14 +165,12 @@ class GenerateVisualizer(bpy.types.Operator):
             material = make_color('bz_color', [red, green, blue])
             active.active_material = material
 
-
-            bar.select = False
+            bar.select_set(False)
             progress = 100 * (i/bar_count)
             wm.progress_update(progress)
             update_progress("Generating Visualizer", progress/100.0)
 
         wm.progress_end()
         update_progress("Generating Visualizer", 1)
-        scene.objects.active = None
-        scene.use_audio_sync = True
+        bpy.context.view_layer.objects.active = None
         return {"FINISHED"}
