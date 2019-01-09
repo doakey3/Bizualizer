@@ -21,6 +21,7 @@ class RENDER_PT_ui(bpy.types.Panel):
     bl_region_type = "WINDOW"
     bl_label = "Bizualizer"
     bl_context = "scene"
+    bl_options = {"DEFAULT_CLOSED"}
 
     def draw(self, context):
         layout = self.layout
@@ -55,7 +56,7 @@ class RENDER_PT_ui(bpy.types.Panel):
         row.operator("object.bz_generate", icon="FILE_REFRESH")
         row = layout.row()
         row.operator("object.bz_align_camera", icon="CAMERA_DATA")
-        
+
         box = layout.box()
         row = box.row()
         row.prop(scene, 'bbz_config')
@@ -65,7 +66,7 @@ class RENDER_PT_ui(bpy.types.Panel):
 
 def initprop():
     bpy.types.Scene.bz_audiofile = bpy.props.StringProperty(
-        name="Audio Path", 
+        name="Audio Path",
         description="Define path of the audio file",
         subtype="FILE_PATH",
         )
@@ -97,8 +98,8 @@ def initprop():
         default=24.0,
         min=0
         )
-    
-    bpy.types.Scene.bz_color = bpy.props.FloatVectorProperty(  
+
+    bpy.types.Scene.bz_color = bpy.props.FloatVectorProperty(
         name="Bar Color",
         subtype='COLOR_GAMMA',
         description="Color applied to bars after visualizer is generated",
@@ -125,7 +126,7 @@ def initprop():
         default=2.25,
         min=0
         )
-        
+
     bpy.types.Scene.bbz_config = bpy.props.StringProperty(
         name="Config File",
         description="Path to the Config File",
@@ -144,11 +145,11 @@ classes = [
 
 def register():
     initprop()
-    
+
     from bpy.utils import register_class
     for cls in classes:
         register_class(cls)
-        
+
 def unregister():
     from bpy.utils import unregister_class
     for cls in reversed(classes):

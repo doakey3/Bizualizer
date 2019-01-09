@@ -23,6 +23,8 @@ Installation
 5. Check the box next to "bizualizer"
 6. Save User Settings
 
+Use the correct release for your Blender version. Add-ons for Blender 2.80 and above will not work for Blender 2.79
+
 Usage
 =====
 
@@ -42,8 +44,8 @@ Examples
 
 Batch Bizualizer
 ================
-This part of the addon will allow you to use a .csv file with 
-visualizer settings for several songs to create the visualizer for 
+This part of the addon will allow you to use a .csv file with
+visualizer settings for several songs to create the visualizer for
 the entire batch. Unfortunately, this part of the addon requires you
 to install some extras...
 
@@ -54,8 +56,8 @@ that executable to your system variable Path. If done correctly, you
 should be able to enter ``ffmpeg`` into your command prompt without
 getting an error.
 
-Install pip.exe into your Blender python folder by downloading 
-`get-pip.py`_ and running it with the python.exe located in your Blender 
+Install pip.exe into your Blender python folder by downloading
+`get-pip.py`_ and running it with the python.exe located in your Blender
 installation folder. You'll need to use a command prompt with admin
 priveledges.
 
@@ -69,7 +71,7 @@ Install `ffmpeg`_ with ``sudo apt-get install ffmpeg``
 
 .. _ffmpeg: https://www.ffmpeg.org/
 
-Install `pillow`_ and `mutagen`_ using pip. To get pip download 
+Install `pillow`_ and `mutagen`_ using pip. To get pip download
 `get-pip.py`_ and run it with: ``sudo python get-pip.py``
 Then install the two packages like this:
 
@@ -90,14 +92,14 @@ Usage
 
   - (Windows) Window -> Toggle System Console
   - (Linux) Start Blender with the terminal
-  
+
 * Run Batch Bizualize
 
 CSV Options
 -----------
 :Song: (Required) The name of the song, for example: We Belong.mp3
 :Background: (Required) The name of the background image, for example: birds.png
-:Bar Color: (hexcode) The color that will be applied to the visualize bars. 
+:Bar Color: (hexcode) The color that will be applied to the visualize bars.
 :Bar Count: (integer) The number of bars that will be displayed in the visualizer
 :Bar Style: The visualizer style. Options include: bottom, top, top-bottom, left, right, left-right, horizontal-center, vertical-center
 :Space Fraction: (Float from 0.0 to 1.0) Controls the spacing between bars.
