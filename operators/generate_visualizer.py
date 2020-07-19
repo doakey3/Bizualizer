@@ -62,7 +62,6 @@ def get_context_area(context, context_dict, area_type='GRAPH_EDITOR',
                         return area
     return None
 
-
 class RENDER_OT_generate_visualizer(bpy.types.Operator):
     bl_idname = "object.bz_generate"
     bl_label = "(re)Generate Visualizer"
@@ -79,7 +78,7 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
     def execute(self, context):
         scene = context.scene
         scene.frame_current = 1
-        if scene.bz_use_radial:
+        if scene.bz_use_sym:
             bar_count = round(scene.bz_bar_count/2)
         else:
             bar_count = scene.bz_bar_count
@@ -89,8 +88,6 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
         radius = scene.bz_radius
         audiofile = bpy.path.abspath(scene.bz_audiofile)
         digits = str(len(str(bar_count)))
-        
-        
 
         noteStep = 120.0/bar_count
         a = 2**(1.0/12.0)
@@ -179,7 +176,7 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
             wm.progress_update(progress)
             update_progress("Generating Visualizer", progress/100.0)
         
-        if scene.bz_use_sym:
+        if scene.bz_use_sym and scene.bz_use_radial:
         
             noteStep = 120.0/bar_count
             a = 2**(1.0/12.0)
