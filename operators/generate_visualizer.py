@@ -78,7 +78,7 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
     def execute(self, context):
         scene = context.scene
         scene.frame_current = 1
-        if scene.bz_use_sym:
+        if scene.bz_use_sym and scene.bz_use_radial:
             bar_count = round(scene.bz_bar_count/2)
         else:
             bar_count = scene.bz_bar_count
