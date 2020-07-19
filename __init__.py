@@ -46,6 +46,7 @@ class RENDER_PT_ui(bpy.types.Panel):
         split = row.split()
         col_a = split.column(align=True)
         col_a.prop(scene, "bz_use_radial")
+        col_a.prop(scene, "bz_use_sym")
         col_b = split.column(align=True)
         col_b.prop(scene, "bz_radius")
         if scene.bz_use_radial:
@@ -112,6 +113,12 @@ def initprop():
         description="Use a circular visualizer",
         default=False
         )
+        
+    bpy.types.Scene.bz_use_sym = bpy.props.BoolProperty(
+        name="Use Symmetry",
+        description="Visualizer is reflected over Y axis",
+        default=False
+        )    
 
     bpy.types.Scene.bz_radius = bpy.props.FloatProperty(
         name="Radius",

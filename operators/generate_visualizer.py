@@ -79,13 +79,18 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
     def execute(self, context):
         scene = context.scene
         scene.frame_current = 1
-        bar_count = scene.bz_bar_count
+        if scene.bz_use_radial:
+            bar_count = round(scene.bz_bar_count/2)
+        else:
+            bar_count = scene.bz_bar_count
         bar_width = scene.bz_bar_width
         amplitude = scene.bz_amplitude
         spacing = scene.bz_spacing
         radius = scene.bz_radius
         audiofile = bpy.path.abspath(scene.bz_audiofile)
         digits = str(len(str(bar_count)))
+        
+        
 
         noteStep = 120.0/bar_count
         a = 2**(1.0/12.0)
@@ -104,7 +109,7 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
 
         wm = context.window_manager
         wm.progress_begin(0, 100.0)
-
+        
         for i in range(0, bar_count):
             name = "bz_bar" + (("%0" + digits + "d") % i)
             mesh = bpy.data.meshes.new(name)
@@ -120,9 +125,12 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
             loc = [0.0, 0.0, 0.0]
 
             if scene.bz_use_radial:
-                angle = -2 * i * math.pi / bar_count
+                if scene.bz_use_sym:
+                    angle = -2 * i * math.pi / bar_count / 2 - math.pi / bar_count / 2
+                else:
+                    angle = -2 * i * math.pi / bar_count
                 bar.rotation_euler[2] = angle
-                loc[0] = -math.sin(angle) * radius
+                loc[0] = -math.sin(angle) * radius 
                 loc[1] = math.cos(angle) * radius
 
             else:
@@ -145,9 +153,10 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
             bpy.ops.anim.keyframe_insert_menu(c, type="Scaling")
             bar.animation_data.action.fcurves[0].lock = True
             bar.animation_data.action.fcurves[2].lock = True
-
+            
             l = h
             h = l*(a**noteStep)
+            print(h)
             
             area = bpy.context.area.type
             bpy.context.area.type = 'GRAPH_EDITOR'
@@ -169,6 +178,79 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
             progress = 100 * (i/bar_count)
             wm.progress_update(progress)
             update_progress("Generating Visualizer", progress/100.0)
+        
+        if scene.bz_use_sym:
+        
+            noteStep = 120.0/bar_count
+            a = 2**(1.0/12.0)
+            l = 0.0
+            h = 16.0
+                
+            for i in range(0, bar_count):
+                name = "bz_barS" + (("%0" + digits + "d") % i)
+                mesh = bpy.data.meshes.new(name)
+                bar = bpy.data.objects.new(name, mesh)
+                scene.collection.objects.link(bar)
+                bar.select_set(True)
+                bpy.context.view_layer.objects.active = bar
+                verts = [(-1, 2, 0), (1, 2, 0), (1, 0, 0), (-1, 0, 0)]
+                faces = [(3, 2, 1, 0)]
+                mesh.from_pydata(verts, [], faces)
+                mesh.update()
+
+                loc = [0.0, 0.0, 0.0]
+
+                if scene.bz_use_radial:
+                    angle = 2 * i * math.pi / bar_count / 2 + math.pi / bar_count / 2
+                    bar.rotation_euler[2] = angle
+                    loc[0] = -math.sin(angle) * radius
+                    loc[1] = math.cos(angle) * radius
+
+                else:
+                    loc[0] = (i * spacing) - ((bar_count * spacing) / 2)
+
+                    if bar_count % 2 == 0:
+                        loc[0] += spacing / 2
+
+                bar.location = (loc[0], loc[1], loc[2])
+
+                bar.scale.x = bar_width
+                bar.scale.y = amplitude
+
+                c = bpy.context.copy()
+                get_context_area(bpy.context, c)
+
+                bpy.ops.object.transform_apply(
+                    location=False, rotation=False, scale=True)
+
+                bpy.ops.anim.keyframe_insert_menu(c, type="Scaling")
+                bar.animation_data.action.fcurves[0].lock = True
+                bar.animation_data.action.fcurves[2].lock = True
+
+                l = h
+                h = l*(a**noteStep)
+                print(h)
+                
+                area = bpy.context.area.type
+                bpy.context.area.type = 'GRAPH_EDITOR'
+
+                bpy.ops.graph.sound_bake(filepath=audiofile, low=(l), high=(h))
+                
+                bpy.context.area.type = area
+                
+                active = bpy.context.active_object
+                active.animation_data.action.fcurves[1].lock = True
+
+                red = scene.bz_color[0]
+                green = scene.bz_color[1]
+                blue = scene.bz_color[2]
+                material = make_color('bz_color', [red, green, blue])
+                active.active_material = material
+
+                bar.select_set(False)
+                progress = 100 * (i/bar_count)
+                wm.progress_update(progress)
+                update_progress("Generating Visualizer", progress/100.0)
 
         wm.progress_end()
         update_progress("Generating Visualizer", 1)
