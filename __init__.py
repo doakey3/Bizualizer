@@ -5,9 +5,9 @@ import shutil
 from .operators import *
 
 bl_info = {
-    "name": "Bizualizer",
-    "description": "Create a simple visualizer for audio",
-    "author": "doakey3",
+    "name": "Bizualizer-français",
+    "description": "Créer un simple visualiseur pour l'audio",
+    "author": "doakey3, boubajoker",
     "version": (1, 2, 4),
     "blender": (2, 80, 0),
     "wiki_url": "https://github.com/doakey3/Bizualizer",
@@ -66,70 +66,70 @@ class RENDER_PT_ui(bpy.types.Panel):
 
 def initprop():
     bpy.types.Scene.bz_audiofile = bpy.props.StringProperty(
-        name="Audio Path",
-        description="Define path of the audio file",
+        name="Chemin audio",
+        description="definire le chemin du fichier audio",
         subtype="FILE_PATH",
         )
 
     bpy.types.Scene.bz_audio_channel = bpy.props.IntProperty(
-        name="Audio Channel",
-        description="Channel where audio will be added",
+        name="chaîne audio",
+        description="Chaîne où l'audio va être ajouté",
         default=1,
         min=1
         )
 
     bpy.types.Scene.bz_bar_count = bpy.props.IntProperty(
-        name="Bar Count",
-        description="The number of bars to make",
+        name="nombre de bars",
+        description="le nombre de bars a mettre",
         default=64,
         min=1
         )
 
     bpy.types.Scene.bz_bar_width = bpy.props.FloatProperty(
-        name="Bar Width",
-        description="The width of the bars",
+        name="Taille des barre",
+        description="la taille des barres",
         default=0.8,
         min=0
         )
 
     bpy.types.Scene.bz_amplitude = bpy.props.FloatProperty(
         name="Amplitude",
-        description="Amplitude of visualizer bars",
+        description="Amplitude des barres visualiseuses",
         default=24.0,
         min=0
         )
 
     bpy.types.Scene.bz_color = bpy.props.FloatVectorProperty(
-        name="Bar Color",
+        name="Barrre de  Couleur",
         subtype='COLOR_GAMMA',
-        description="Color applied to bars after visualizer is generated",
+        description="Couleurs appliquées aux bares après que le visualizeur est géneré",
         size=3,
         default=(1.0, 1.0, 1.0),
         min=0.0, max=1.0,)
 
     bpy.types.Scene.bz_use_radial = bpy.props.BoolProperty(
-        name="Use Radial",
-        description="Use a circular visualizer",
+        name="Utiliser un visualiseur Radieux",
+        description="Utuliser un visualizeur circulaire",
         default=False
         )
 
     bpy.types.Scene.bz_radius = bpy.props.FloatProperty(
-        name="Radius",
-        description="Radius of the radial visualizer",
+        name="Émision",
+        description="émission visualizer",
         default=20,
         min=0
         )
 
     bpy.types.Scene.bz_spacing = bpy.props.FloatProperty(
-        name="Spacing",
-        description="Spacing between bars",
+        name="Espacement",
+        description="Escapacement entre les bars",
         default=2.25,
         min=0
         )
 
     bpy.types.Scene.bbz_config = bpy.props.StringProperty(
-        name="Config File",
-        description="Path to the Config File",
+        name="fichier de configuration",
+        description="chemin de configuration du fichier",
         subtype="FILE_PATH",
         )
 
