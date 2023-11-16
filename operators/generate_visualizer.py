@@ -14,25 +14,25 @@ def make_color(name, rgb):
     nodes = material.node_tree.nodes
     for node in nodes:
         nodes.remove(node)
-        
+
     node_lightpath = nodes.new(type='ShaderNodeLightPath')
     node_lightpath.location = [-200, 100]
-        
+
     node_emission = nodes.new(type='ShaderNodeEmission')
     node_emission.inputs[0].default_value = (rgb[0], rgb[1], rgb[2], 1)
     node_emission.location = [0, -50]
-    
+
     node_mix = nodes.new(type='ShaderNodeMixShader')
     node_mix.location = [200, 0]
-    
+
     node_output = nodes.new(type='ShaderNodeOutputMaterial')
     node_output.location = [400,0]
-    
+
     links = material.node_tree.links
     links.new(node_lightpath.outputs[0], node_mix.inputs[0])
     links.new(node_emission.outputs[0], node_mix.inputs[2])
     links.new(node_mix.outputs[0], node_output.inputs[0])
-    
+
     return material
 
 
@@ -136,26 +136,27 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
             bar.scale.x = bar_width
             bar.scale.y = amplitude
 
-            c = bpy.context.copy()
+            c = {attr_name: getattr(bpy.context, attr_name) for attr_name in dir(bpy.context) if attr_name != 'grease_pencil'}
+
             get_context_area(bpy.context, c)
 
             bpy.ops.object.transform_apply(
                 location=False, rotation=False, scale=True)
 
-            bpy.ops.anim.keyframe_insert_menu(c, type="Scaling")
+            bpy.ops.anim.keyframe_insert_menu(type="Scaling")
             bar.animation_data.action.fcurves[0].lock = True
             bar.animation_data.action.fcurves[2].lock = True
 
             l = h
             h = l*(a**noteStep)
-            
+
             area = bpy.context.area.type
             bpy.context.area.type = 'GRAPH_EDITOR'
 
-            bpy.ops.graph.sound_bake(filepath=audiofile, low=(l), high=(h))
-            
+            bpy.ops.graph.sound_to_samples(filepath=audiofile, low=(l), high=(h))
+
             bpy.context.area.type = area
-            
+
             active = bpy.context.active_object
             active.animation_data.action.fcurves[1].lock = True
 
