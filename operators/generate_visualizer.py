@@ -1,4 +1,5 @@
 import bpy
+from bpy_extras import anim_utils
 import math
 
 from .tools.update_progress import update_progress
@@ -144,8 +145,14 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
                 location=False, rotation=False, scale=True)
 
             bpy.ops.anim.keyframe_insert_menu(type="Scaling")
-            bar.animation_data.action.fcurves[0].lock = True
-            bar.animation_data.action.fcurves[2].lock = True
+            anim_data = bar.animation_data
+            action = anim_data.action
+            slot = anim_data.action_slot
+
+            channelbag = anim_utils.action_get_channelbag_for_slot(action, slot)
+            for fcu in channelbag.fcurves:
+                if fcu.data_path == "scale" and fcu.array_index in (0, 2):
+                    fcu.lock = True
 
             l = h
             h = l*(a**noteStep)
@@ -158,7 +165,15 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
             bpy.context.area.type = area
 
             active = bpy.context.active_object
-            active.animation_data.action.fcurves[1].lock = True
+            anim_data = active.animation_data
+            action = anim_data.action
+            slot = anim_data.action_slot
+
+            channelbag = anim_utils.action_get_channelbag_for_slot(action, slot)
+
+            for fcu in channelbag.fcurves:
+                if fcu.data_path == "scale" and fcu.array_index == 1:
+                    fcu.lock = True
 
             red = scene.bz_color[0]
             green = scene.bz_color[1]

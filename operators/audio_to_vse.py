@@ -26,14 +26,14 @@ class RENDER_OT_audio_to_vse(bpy.types.Operator):
         if not scene.sequence_editor:
             scene.sequence_editor_create()
 
-        sound_strip = scene.sequence_editor.sequences.new_sound(
+        sound_strip = scene.sequence_editor.strips.new_sound(
             "bz_" + name, audiofile, chan, start)
 
 
 
         frame_start = 300000
         frame_end = -300000
-        for strip in scene.sequence_editor.sequences:
+        for strip in scene.sequence_editor.strips:
             try:
                 if strip.frame_final_start < frame_start:
                     frame_start = strip.frame_final_start

@@ -15,22 +15,18 @@ class RENDER_OT_remove_bz_audio(bpy.types.Operator):
             return True
 
     def execute(self, context):
-
         scene = context.scene
+        seq = scene.sequence_editor
+        if not seq:
+            return {'CANCELLED'}
 
-        if not scene.sequence_editor:
-            return {"FINISHED"}
+        to_remove = [strip for strip in seq.strips_all
+                     if strip.name.startswith("bz_")]
 
-        audiofile = bpy.path.abspath(scene.bz_audiofile)
-        name = ntpath.basename(audiofile)
-        all_strips = list(sorted(
-            bpy.context.scene.sequence_editor.sequences_all,
-            key=lambda x: x.frame_start))
-        bpy.ops.sequencer.select_all(action="DESELECT")
-        count = 0
-        for strip in all_strips:
-            if strip.name.startswith("bz_" + name):
-                strip.select = True
-                bpy.ops.sequencer.delete()
+        for strip in to_remove:
+            try:
+                seq.strips.remove(strip)
+            except RuntimeError:
+                pass
 
-        return {"FINISHED"}
+        return {'FINISHED'}
